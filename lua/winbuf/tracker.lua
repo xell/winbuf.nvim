@@ -36,7 +36,8 @@ end
 function M.add_buf_to_win(win, buf)
   if not api.nvim_win_is_valid(win) then return end
   if not api.nvim_buf_is_valid(buf) then return end
-  if not vim.bo[buf].buflisted or vim.bo[buf].buftype ~= "" then return end
+  if not vim.bo[buf].buflisted then return end
+  if vim.bo[buf].buftype ~= "" and vim.bo[buf].buftype ~= "terminal" then return end
 
   local bufs = M.get_win_bufs(win)
   for _, b in ipairs(bufs) do

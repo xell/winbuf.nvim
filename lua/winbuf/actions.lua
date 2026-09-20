@@ -47,6 +47,11 @@ local function is_normal_win(win)
   return true
 end
 
+local function is_movable_buf(buf)
+  local buftype = vim.bo[buf].buftype
+  return vim.bo[buf].buflisted and (buftype == "" or buftype == "terminal")
+end
+
 -- wincmd can jump diagonally (e.g. in a|b layout, wincmd j lands on b).
 -- This checks the target is geometrically where we actually want it.
 local function is_in_direction(src, tgt, dir)
@@ -133,7 +138,7 @@ function M.move_buf(direction)
   local buf = api.nvim_get_current_buf()
   local src_win = api.nvim_get_current_win()
 
-  if vim.bo[buf].buftype ~= "" or not vim.bo[buf].buflisted then return end
+  if not is_movable_buf(buf) then return end
 
   tracker._suppress_tracking = true
 

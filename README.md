@@ -132,9 +132,37 @@ buf_delete = function(buf) require("mini.bufremove").delete(buf, false) end
 
 ### Highlight Groups
 
-The plugin defines 14 highlight groups. Override them in the `highlights` table or with `nvim_set_hl` after setup. They're reapplied automatically on colorscheme change.
+Each entry in `highlights` is the name of an existing Neovim highlight group. The
+plugin links its internal groups to these names, so your colorscheme controls the
+appearance. If a configured group does not exist, `Normal` is used as the fallback.
+The links are reapplied automatically on colorscheme change.
 
-`WinBufActive`, `WinBufActiveSep`, `WinBufInactive`, `WinBufInactiveSep`, `WinBufActiveClose`, `WinBufInactiveClose`, `WinBufActiveModified`, `WinBufInactiveModified`, `WinBufActiveDiagError`, `WinBufActiveDiagWarn`, `WinBufInactiveDiagError`, `WinBufInactiveDiagWarn`, `WinBufFill`, `WinBufActiveUnderline`
+```lua
+require("winbuf").setup({
+  highlights = {
+    active = "TabLineFill",
+    active_sep = "TabLine",
+    inactive = "TabLine",
+    inactive_sep = "TabLineFill",
+    active_close = "DiagnosticError",
+    inactive_close = "TabLine",
+    active_modified = "DiagnosticWarn",
+    inactive_modified = "TabLine",
+    active_diag_error = "DiagnosticError",
+    active_diag_warn = "DiagnosticWarn",
+    inactive_diag_error = "DiagnosticError",
+    inactive_diag_warn = "DiagnosticWarn",
+    fill = "Normal",
+    active_underline = "TabLine",
+  },
+})
+```
+
+The internal groups are `WinBufActive`, `WinBufActiveSep`, `WinBufInactive`,
+`WinBufInactiveSep`, `WinBufActiveClose`, `WinBufInactiveClose`,
+`WinBufActiveModified`, `WinBufInactiveModified`, `WinBufActiveDiagError`,
+`WinBufActiveDiagWarn`, `WinBufInactiveDiagError`, `WinBufInactiveDiagWarn`,
+`WinBufFill`, and `WinBufActiveUnderline`.
 
 ## Commands
 

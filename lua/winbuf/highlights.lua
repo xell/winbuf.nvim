@@ -20,23 +20,23 @@ local groups = {
   { "WinBufActiveUnderline",   "active_underline" },
 }
 
+local function exists(name)
+  local ok, hl = pcall(api.nvim_get_hl, 0, { name = name, link = true })
+  return ok and next(hl) ~= nil
+end
+
 local function apply()
   for _, def in ipairs(groups) do
-    local hl = hl_config[def[2]]
-    if hl then
-      -- force = true so colorschemes can't silently clear these
-      api.nvim_set_hl(0, def[1], {
-        fg = hl.fg, bg = hl.bg,
-        bold = hl.bold, italic = hl.italic,
-        underline = hl.underline, sp = hl.sp,
-        default = false,
-      })
+    local name = hl_config[def[2]]
+    if type(name) ~= "string" or name == "" or not exists(name) then
+      name = "Normal"
     end
+    api.nvim_set_hl(0, def[1], { link = name })
   end
 end
 
 function M.setup(hl)
-  hl_config = hl
+  hl_config = hl or {}
   apply()
 
   api.nvim_create_autocmd("ColorScheme", {
